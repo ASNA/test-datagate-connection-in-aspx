@@ -1,0 +1,113 @@
+﻿        &nbsp;&nbsp;&nbsp;
+        <a id="copyButton" href="#">Copy values to the clipboard</a>
+        &nbsp;&nbsp;&nbsp;
+        <span id="copied-message">Copied to clipboard!</span>
+      
+        const copyButton = document.getElementById("copyButton");
+        const copiedMessage = document.getElementById("copied-message");
+
+
+
+        let timeoutId = null;
+
+        function showCopiedToClipboardMessage() {
+            // 1. Clear any existing fade-out timers if the button is clicked again quickly
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+
+            // 2. Make the message visible and fully opaque
+            copiedMessage.style.display = "inline"; // Or 'inline-block'
+
+            // A tiny delay is needed for the browser to apply 'display' before starting the transition
+            setTimeout(() => {
+                copiedMessage.style.opacity = "1";
+            }, 10);
+
+            // 3. Set a timer to fade the message out after 2 seconds
+            timeoutId = setTimeout(() => {
+                copiedMessage.style.opacity = "0";
+
+                // 4. After the fade-out transition is complete (0.5s), hide it again
+                // This prevents the invisible element from taking up space
+                setTimeout(() => {
+                    copiedMessage.style.display = "none";
+                }, 500); // This MUST match the CSS transition duration
+            }, 2000); // Message is visible for 2 seconds (2000ms)
+        }
+
+        const copyToClipboard = async (text) => {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (err) {
+                console.error("Failed to copy text: ", err);
+                alert("Failed to copy text");
+                return false;
+            }
+        };
+
+        // Attach a click event listener to the button
+        copyButton.addEventListener("click", async () => {
+            // try {
+            // 1. Select all input and select elements within the form with id "dataGateForm"
+            const formElements = document.querySelectorAll(
+                "div.form-group input, div.form-group select"
+            );
+
+            const valueMap = Array.from(formElements)
+                .filter((element) => element.value !== "") // Keep only elements with a value
+                .reduce((accumulator, element) => {
+                    // For each element, set a key-value pair in the accumulator map
+                    accumulator.set(element.name, element.value);
+                    // Return the map so it can be used in the next iteration
+                    return accumulator;
+                }, new Map()); // Start with a new, empty Map as the initial value
+
+
+            valueMap.delete('library')
+            valueMap.delete('file')
+            valueMap.delete('fieldname')
+
+            const platform = document.getElementById("platform").value;
+            switch (platform) {
+                case "LOCAL":
+                    valueMap.set("user", "");
+                    valueMap.set("password", "");
+                    valueMap.set("server", "*Local");
+                    valueMap.set("platformAttribute", "*DATALINK");
+                    valueMap.set(
+                        "Note:",
+                        "For DataGate for Win/Server, the dblabel is the DG database label name."
+                    );
+                    break;
+                case "IBMI":
+                    valueMap.set("dblabel", valueMap.get("server"));
+                    valueMap.set("platformAttribute", "*DATALINK");
+                    valueMap.set(
+                        "Note:",
+                        "For the IBM i, the dblabel isn't necessary but usually set to the server name or IP address."
+                    );
+                    break;
+                case "DSS":
+                    valueMap.set("platformAttribute", "*SQLOLEDB");
+                    valueMap.set(
+                        "Note:",
+                        "For DataGate for SQL Server, the dblabel is the name of SQL Server instance."
+                    );
+                    break;
+            }
+            const valuePairs = Array.from(valueMap)
+                .filter((arr) => arr[1] !== "") // First, keep only elements with a non-empty value
+                .map((arr) => `${arr[0]} = ${arr[1]}`); // The
+
+            // 3. Join the array into a single string, with each pair on a new line
+            const outputString = valuePairs.join("\n");
+
+            // 4. Use the asynchronous Navigator Clipboard API to copy the text
+            copyToClipboard(outputString);
+
+            // 5. Alert the user that the operation was successful
+            showCopiedToClipboardMessage();
+        });
+
