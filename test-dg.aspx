@@ -1,5 +1,6 @@
 ﻿
-<%@ Page Language="AVR" %><%@ Import Namespace="System.Net.Sockets" %>
+<%@ Page Language="AVR" %>
+<%@ Import Namespace="System.Net.Sockets" %>
 <%@ Import Namespace="System.Net.NetworkInformation" %>
 <%@ Import Namespace="System.Collections.Generic" %>
 
@@ -7,7 +8,6 @@
 <%@ Import Namespace="ASNA.DataGate.Common" %>
 <%@ Import Namespace="ASNA.DataGate.DataLink" %>
 <%@ Import Namespace="ASNA.DataGate.Providers" %>
-
 
 
 <script runat="server">
@@ -61,7 +61,7 @@
                     ErrorMessage = String.Format('{0}<div>Its likely that DG isn''t present on {1}, isn''t started on {1}, or there is trouble with port {2}.</div>', ErrorMessage, FormInputs['server'], FormInputs['port'])                        
                 EndIf 
                 If ex.InnerException <> *Nothing 
-                    InnerMessage = ex.InnerException.Message + 'Roger'
+                    InnerMessage = ex.InnerException.Message
                     InnerMessage = String.Format('{0}<div>{1}</div><div>{2}</div>',InnerMessage, PingServer(FormInputs), CheckPort(FormInputs))
                 EndIf 
             EndTry 
@@ -86,11 +86,7 @@
         DgDb.Open()
 
         If (AttemptRecordRead()) 
-            Try 
-                DgFile.OpenNewAdgDataSet( *ByRef DgDataSet )  
-            Catch ex Type(Exception)
-                Throw *New Exception(String.Format('Error opening {0}/{1} file', Library, file))                        
-            EndTry
+            DgFile.OpenNewAdgDataSet( *ByRef DgDataSet )  
             DgFile.ReadSequential( DgDataSet, ReadSequentialMode.Next, LockRequest.Read )
             FieldValue = GetDataGateFieldValue(Fieldname)
             DgFile.Close()
@@ -154,7 +150,7 @@
         Try 
             LeaveSr DgDataSet.Tables[0].Rows[0][DgDataSet.Tables[0].Columns[FieldName]].ToString()  
         Catch ex Type(Exception) 
-            Throw *New Exception(String.Format('Field name not found: {0}', FieldName))        
+            Throw *New Exception(String.Format('Field name not found: {0}', FieldName), ex )       
         EndTry 
     EndFunc
 
@@ -210,7 +206,7 @@
         BegUsing tcpc Type(TcpClient) Value(*New TcpClient()) 
             Try 
                 tcpc.Connect(Server, Port)      
-                Result = String.Format('Port {0} appears to be open', Port)
+                Result = String.Format('Port {0} appears to be open.', Port)
             Catch ex Type(Exception) 
                 Result = String.Format('<br>Port {0} does not appear to be open to {1}.', Port, Server) 
             EndTry 
@@ -377,7 +373,7 @@
                     />
                 </div>
 
-                <div class="optional-values">These values are optional. They test reading a file. All three must be provided to do the read test.</div>
+                <div class="optional-values">These values are optional--they test reading a file. Note: a read test is necessary to check your WebPak license.</div>
 
                 <!-- Library Input -->
                 <div class="form-group">
@@ -461,6 +457,7 @@
                     hideElement('password')
                     hideElement('server')
                     showElement('dblabel')
+                    showElement('dblabel')
                     //document.getElementById("user").value = ''
                     //document.getElementById("password").value = ''
                     //document.getElementById("server").value = ''
@@ -475,10 +472,15 @@
                 case "DSS":
                     showElement('user')
                     showElement('password')
-                    hideElement('server')
-                    hideElement('dblabel')
+                    showElement('server')
+                    showElement('dblabel')
+
+                    document.querySelector('input[name="dblabel"]').setAttribute("placeholder", "Should be 'SQL' for SQL Server");
+                    console.log(document.querySelector('input[name="dblabel"]'))
                     break;
             }           
+
+
         }
 
 
