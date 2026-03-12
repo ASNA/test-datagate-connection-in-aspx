@@ -1,12 +1,12 @@
-\# Testing DataGate connections with ASP.NET
+# Testing DataGate connections with ASP.NET
 
 
 
-\[Get the source from GitHub here](https://github.com/ASNA/test-datagate-connection-in-aspx)
+[Get the source from GitHub here](https://github.com/ASNA/test-datagate-connection-in-aspx)
 
 
 
-Before you deploy a Visual RPG (AVR) ASP.NET Web application for production use, it’s a good idea to ensure the DataGate connection is working on the Web Server. You can do that with the \[DataGate Monitor](/en/kb/datagate-monitor), but that doesn’t confirm that ASP.NET is working and that AVR is working with ASP.NET; nor does it test that the WebPak license is valid.
+Before you deploy a Visual RPG (AVR) ASP.NET Web application for production use, it’s a good idea to ensure the DataGate connection is working on the Web Server. You can do that with the [DataGate Monitor](/en/kb/datagate-monitor), but that doesn’t confirm that ASP.NET is working and that AVR is working with ASP.NET; nor does it test that the WebPak license is valid.
 
 
 
@@ -34,13 +34,13 @@ Using this test file before you deploy your Visual RPG Web application:
 
 
 
-\*   Confirms ASP.NET is installed and worked
+*   Confirms ASP.NET is installed and worked
 
-\*   Confirms that AVR is installed working
+*   Confirms that AVR is installed working
 
-\*   Confirms that you can connect to your target server successfully
+*   Confirms that you can connect to your target server successfully
 
-\*   Using the read option, it confirms that the user specified has permission to the file read and it confirms that your WebPak license is valid.
+*   Using the read option, it confirms that the user specified has permission to the file read and it confirms that your WebPak license is valid.
 
 
 
@@ -52,7 +52,7 @@ Figures 1 and 2 below show the test page in action.
 
 
 
-!\[Success connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-success.png) 
+![Success connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-success.png) 
 
 
 
@@ -60,7 +60,7 @@ Figure 1. Success connecting to DataGate for IBM i.
 
 
 
-!\[Failure connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-error.png) 
+![Failure connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-error.png) 
 
 
 
@@ -68,7 +68,7 @@ Figure 2. Failure connecting to DataGate for IBM i.
 
 
 
-\## Optional test to read a record
+## Optional test to read a record
 
 
 
@@ -76,8 +76,7 @@ When provided, the bottom three inputs (Library, File, Field name) attempt to re
 
 
 
-\## Using the DataGate ASP.NET Connection Tester
-
+## Using the DataGate ASP.NET Connection Tester
 
 
 Put the `test-dg.aspx` file in the root of where your project is hosted on IIS. Point your browser to that test page. For example, if the domain for your IIS instance is
@@ -100,15 +99,15 @@ in your browser.
 
 
 
-Generally, you should use the `test-dg.aspx` in the root of an IIS site or virtual directory before you first deploy your app. However, can also add `test-dg.aspx` to deployed sites as long as they were not deployed with the “Precompile during publishing” option (shown in Figure 3 below).
+Generally, you should use the `test-dg.aspx` in the root of an IIS site or virtual directory before you first deploy your app. However, can also add `test-dg.aspx` to deployed sites as long as they were not deployed with the "Precompile during publishing" option (shown in Figure 3 below).
 
 
 
-!\[Failure connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-precompiled.png) 
+![Failure connecting with DataGate for IBM i](https://nyc3.digitaloceanspaces.com/asna-assets/assets/articles/test-dg-connection-precompiled.png) 
 
 
 
-Figure 3. \\`test-dg.aspx\\` can't be added directly to projects deployed with the 'precompile during publishing' option.
+Figure 3. `test-dg.aspx` can't be added directly to projects deployed with the 'precompile during publishing' option.
 
 
 
@@ -116,61 +115,61 @@ For using the connection tester with precompiled projects, you need to either:
 
 
 
-\*   Add the `test-db.asp` file to the root your project and redeploy it
+*   Add the `test-db.asp` file to the root your project and redeploy it
 
-\*   Temporarily remove the contents of the IIS site or virtual directory, test the connection, then restore the contents.
-
-
-
-\## Attribute-specific details
+*   Temporarily remove the contents of the IIS site or virtual directory, test the connection, then restore the contents.
 
 
 
-\### DataGate for IBM i
+## Attribute-specific details
 
 
 
-\*   User: IBM i user
-
-\*   Password: IBM i user password
-
-\*   Server: IBM i IP address or name
-
-\*   DB Label: Can be any text value or empty
-
-\*   Port: Default value is 5042. \[How to confirm the IBM i’s TCP/IP port assignment](https://www.asna.com/en/kb/confirm-datagate-port)
+### DataGate for IBM i
 
 
 
-\### DataGate for SQL Server
+*   User: IBM i user
+
+*   Password: IBM i user password
+
+*   Server: IBM i IP address or name
+
+*   DB Label: Can be any text value or empty
+
+*   Port: Default value is 5042. [How to confirm the IBM i's DataGate TCP/IP port assignment](https://www.asna.com/en/kb/confirm-datagate-port)
 
 
 
-\*   User: \\\*Domain or SQL Server user
-
-\*   Password: Empty if \\\*Domain or SQL Server user password
-
-\*   Server: SQL Server instance name
-
-\*   DB Label: Must be ‘SQL’
-
-\*   Port: Must be 5042
+### DataGate for SQL Server
 
 
 
-\### DataGate for Windows and Servers
+*   User: `*Domain` or SQL Server user
+
+*   Password: Empty if `*Domain` or SQL Server user password
+
+*   Server: SQL Server instance name
+
+*   DB Label: Must be `SQL`
+
+*   Port: Must be 5042
 
 
 
-\*   User: Must be \\\*Domain
+### DataGate for Windows and Servers
 
-\*   Password: Must be empty
 
-\*   Server: Must be ‘\\\*Local’
 
-\*   DB Label: Must be the assigned Database Label (see the section below)
+*   User: Must be `*Domain`
 
-\*   Port: Must be 5042
+*   Password: Must be empty
+
+*   Server: Must be `*Local`
+
+*   DB Label: Must be the assigned Database Label (see the section below)
+
+*   Port: Must be 5042
 
 
 
