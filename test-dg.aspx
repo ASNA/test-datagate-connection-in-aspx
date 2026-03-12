@@ -58,7 +58,7 @@
             Catch ex Type(Exception) 
                 ErrorMessage = ex.Message
                 If (ErrorMessage.Contains('DataGate Service did not respond'))
-                    ErrorMessage = String.Format('{0}<div>Its likely that DG isn''t present on {1}, isn''t started on {1}, or there is trouble with port {2}.</div>', ErrorMessage, FormInputs['server'], FormInputs['port'])                        
+                    ErrorMessage = String.Format('{0}<div>Its likely that DG isn''t present on {1}, isn''t started on {1}, or there is an issue with port {2}.</div>', ErrorMessage, FormInputs['server'], FormInputs['port'])                        
                 EndIf 
                 If ex.InnerException <> *Nothing 
                     InnerMessage = ex.InnerException.Message
@@ -373,7 +373,7 @@
                     />
                 </div>
 
-                <div class="optional-values">These values are optional--they test reading a file. Note: a read test is necessary to check your WebPak license.</div>
+                <div class="optional-values">These values are optional--they test reading a file. This read test checks your WebPak license and user permissions.</div>
 
                 <!-- Library Input -->
                 <div class="form-group">
@@ -414,7 +414,7 @@
             <!-- Submit Button -->
             <button type="submit" class="submit-btn">Connect</button>
             &nbsp;&nbsp;&nbsp;
-            <a href="">Help using this utilty</a>
+            <a href="https://www.asna.com/en/kb/datagate-connection-tester">Help using this utilty</a>
         </form>
     </div>
 
@@ -453,31 +453,27 @@
 
             switch (platform) {
                 case "LOCAL":
-                    hideElement('user')
-                    hideElement('password')
-                    hideElement('server')
-                    showElement('dblabel')
-                    showElement('dblabel')
-                    //document.getElementById("user").value = ''
-                    //document.getElementById("password").value = ''
-                    //document.getElementById("server").value = ''
-                    //document.getElementById("port").value = '5042'
+                    document.querySelector('input[name="user"]').setAttribute("placeholder", "Must be *DOMAIN");
+                    document.querySelector('input[name="password"]').setAttribute("placeholder", "Must be empty");
+                    document.querySelector('input[name="server"]').setAttribute("placeholder", "Must be *Local" );
+                    document.querySelector('input[name="dblabel"]').setAttribute("placeholder", "Must be the assigned database label");
+                    document.querySelector('input[name="port"]').setAttribute("placeholder", "Must be 5042");
+
                     break;
                 case "IBMI":
-                    showElement('user')
-                    showElement('password')
-                    showElement('server')
-                    hideElement('dblabel')
+                    document.querySelector('input[name="user"]').setAttribute("placeholder", "IBM i user name");
+                    document.querySelector('input[name="password"]').setAttribute("placeholder", "IBM i password");
+                    document.querySelector('input[name="server"]').setAttribute("placeholder", "Server IP address or name");
+                    document.querySelector('input[name="dblabel"]').setAttribute("placeholder", "Can be any text value or left empty");
+                    document.querySelector('input[name="port"]').setAttribute("placeholder", "Default is 5042");
+
                     break;
                 case "DSS":
-                    showElement('user')
-                    showElement('password')
-                    showElement('server')
-                    showElement('dblabel')
-
-                    document.querySelector('input[name="dblabel"]').setAttribute("placeholder", "Should be 'SQL' for SQL Server");
-                    console.log(document.querySelector('input[name="dblabel"]'))
-                    break;
+                    document.querySelector('input[name="user"]').setAttribute("placeholder", "*DOMAIN or SQL Server user name");
+                    document.querySelector('input[name="password"]').setAttribute("placeholder", "Empty if *DOMAIN or SQL server password");
+                    document.querySelector('input[name="server"]').setAttribute("placeholder", "Server IP address or name");
+                    document.querySelector('input[name="dblabel"]').setAttribute("placeholder", "Must be 'SQL'");
+                    document.querySelector('input[name="port"]').setAttribute("placeholder", "Must be 5042");
             }           
 
 
@@ -496,8 +492,6 @@
             selectOptionFromAttribute();
 
             setElementsDisplayForPlatform(selectElement.value)
-
-            const x = 'x'
         });
 
 
