@@ -1,11 +1,6 @@
 # Testing DataGate connections with ASP.NET
 
 
-
-[Get the source from GitHub here](https://github.com/ASNA/test-datagate-connection-in-aspx)
-
-
-
 Before you deploy a Visual RPG (AVR) ASP.NET Web application for production use, it’s a good idea to ensure the DataGate connection is working on the Web Server. You can do that with the [DataGate Monitor](/en/kb/datagate-monitor), but that doesn’t confirm that ASP.NET is working and that AVR is working with ASP.NET; nor does it test that the WebPak license is valid.
 
 
